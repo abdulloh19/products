@@ -1,48 +1,48 @@
 const elProductWrapper = document.querySelector(".product-wrapper");
 elProductWrapper.className = "row list-unstyled g-3";
 
-// const producs = {
-//     id: 123,
-//     title: "Redmi Note 10 Pro",
-//     img: "https://picsum.photos/300/200",
-//     price: 4300000,
-//     model: "Xiaomi",
-//     addedDate: new Date("2021-11-12").toISOString(),
-//     benefits: ["8gb", "128gb", "Waterproof"]
-//   };
+const createElement = function(tagName, className, text) {
+  const createdElement = document.createElement(tagName);
+  createdElement.className = className;
 
+  if (text) {
+    createdElement.textContent = text;
+  }
+
+  return createdElement;
+}
 
 
 for (let i = 0; i < products.length; i++) {
-    const elProducts = document.createElement("li");
-    elProducts.className = "col-4";
-    const elProductItem = document.createElement("div");
-    elProductItem.className = "card";
-    const elProductImg = document.createElement("img");
-    elProductImg.src = products[i].img;
-    elProductImg.className = "card-img-top";
-    const elPoroductBody = document.createElement("div");
-    elPoroductBody.className = "card-body";
-    const elProductTitle = document.createElement("p");
-    elProductTitle.textContent = products[i].title;
-    elProductTitle.className = "card-title";
-    const elProductPrice = document.createElement("p");
-    elProductPrice.className = "card-text fw-bold";
-    const elProductMark = document.createElement("mark");
-    elProductMark.textContent = products[i].price;  
-    const elProductModel = document.createElement("p");
-    elProductModel.textContent = products[i].model;
-    elProductModel.className = "badge bg-success";
-    const elProductIcons = document.createElement("div");
-    elProductIcons.className = "position-absolute top-0 end-0 d-flex";
-    const elPoroductDelete = document.createElement("button");
-    elPoroductDelete.className = "btn rounded-0 btn-secondary";
-    const elPoroductDeleteIcon = document.createElement("i");
-    elPoroductDeleteIcon.className = "fa-solid fa-pen";
-    const elPoroductEdit = document.createElement("button");
-    elPoroductEdit.className = "btn rounded-0 btn-danger";
-    const elPoroductEditIcon = document.createElement("i");
-    elPoroductEditIcon.className = "fa-solid fa-trash";
+    const carrenProduct = products[i]
+
+    const elProducts = createElement("li", "col-4");
+    
+    const elProductItem = createElement("div", "card");
+    
+    const elProductImg = createElement("img", "card-img-top");
+    elProductImg.src = carrenProduct.img;
+
+    const elPoroductBody = createElement("div", "card-body");
+
+    const elProductTitle = createElement("p", "card-title", carrenProduct.title);
+
+    const elProductPrice = createElement("p", "card-text fw-bold");
+
+    const elProductMark = createElement("mark");
+    elProductMark.textContent = carrenProduct.price;
+
+    const elProductModel = createElement("p", "badge bg-success", carrenProduct.model);
+
+    const elProductIcons = createElement("div", "position-absolute top-0 end-0 d-flex");
+
+    const elPoroductDelete = createElement("button", "btn rounded-0 btn-secondary");
+
+    const elPoroductDeleteIcon = createElement("i", "fa-solid fa-pen");
+
+    const elPoroductEdit = createElement("button", "btn rounded-0 btn-danger");
+    
+    const elPoroductEditIcon = createElement("i", "fa-solid fa-trash");
 
 
     elProducts.append(elProductItem);
