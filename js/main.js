@@ -12,32 +12,40 @@ const createElement = function(tagName, className, text) {
   return createdElement;
 }
 
-const createProduct = function(product) {
-  const productRow = document.createElement("li");
 
-  for (let i = 0; i < products.length; i++) {
+for (let i = 0; i < products.length; i++) {
     const carrenProduct = products[i]
+
     const elProducts = createElement("li", "col-4");
+    
     const elProductItem = createElement("div", "card");
+    
     const elProductImg = createElement("img", "card-img-top");
     elProductImg.src = carrenProduct.img;
+
     const elPoroductBody = createElement("div", "card-body");
+
     const elProductTitle = createElement("h3", "card-title", carrenProduct.title);
+
     const elProductPrice = createElement("p", "card-text fw-bold");
+
     const elProductMark = createElement("mark");
     elProductMark.textContent = carrenProduct.price;
-    const elProductModel = createElement("p", "badge bg-success", carrenProduct.model);
-    const addedDate = new Data (carrenProduct.addedDate)
-    const elProductData = createElement("p", "card-text", "")
-    const elProductList = createElement("ul", "d-flex flex-wrap list-unstyled");
 
+    const elProductModel = createElement("p", "badge bg-success", carrenProduct.model);
+
+    const addedDate = new Date(carrenProduct.addedDate)
+    const elProductData = createElement("p", "card-text", `${addedDate.getDate()}.${(addedDate.getMonth() + 1)}.${addedDate.getFullYear()}`);
+
+    const elProductList = createElement("ul", "d-flex flex-wrap list-unstyled");
+    
     for (let j = 0; j < carrenProduct.benefits.length; j++) {
 
       const elProductBenefits = createElement("li", "badge bg-primary me-1 mb-1", carrenProduct.benefits[j])
 
       elProductList.append(elProductBenefits);
     };
-
+ 
     const elProductIcons = createElement("div", "position-absolute top-0 end-0 d-flex");
 
     const elPoroductDelete = createElement("button", "btn rounded-0 btn-secondary");
@@ -50,24 +58,58 @@ const createProduct = function(product) {
     elPoroductEdit.append(elPoroductEditIcon);
     elProductIcons.append(elPoroductEdit);
 
-  //   elProducts.append(elProductItem);
-  // elProductItem.append(elProductImg);
-  // elProductItem.append(elPoroductBody);
-  // elPoroductBody.append(elProductTitle);
-  // elPoroductBody.append(elProductPrice);
-  // elProductPrice.append(elProductMark);
-  // elPoroductBody.append(elProductModel);
-  // elPoroductBody.append(addedDate);
-  // elPoroductBody.append(elProductData);
-  // elPoroductBody.append(elProductIcons);
-  // elPoroductBody.append(elProductList);
+    
+    elProducts.append(elProductItem);
+  elProductItem.append(elProductImg);
+  elProductItem.append(elPoroductBody);
+  elPoroductBody.append(elProductTitle)
+  elPoroductBody.append(elProductPrice);
+  elProductPrice.append(elProductMark);
+  elPoroductBody.append(elProductModel);
+  elPoroductBody.append(elProductData)
+  elPoroductBody.append(elProductIcons);
+  elPoroductBody.append(elProductList)
 
-  elProductWrapper.append(elProducts);
-  productRow.append(elProductItem, elProductImg, elPoroductBody, elProductTitle, elProductPrice, elProductMark, elProductModel, elProductData. elProductIcons);
   
+  elProductWrapper.append(elProducts);
   };
-}
 
+  const eladdProduct = document.querySelector("#add-product-form");
+  const elAddTitleInput = document.querySelector("#product-title");
+  const elAddPriceInput = document  .querySelector("#price");
+  const elAddManufacturer = document.querySelector("#product-manufacturer");
+  const elAddBenefits = document.querySelector("#benefits");
 
+  
+const select = document.querySelector("#productManufacturer");
 
+      for (let k = 0; k < manufacturers.length; k++) {
+        const option = createElement("option", "", manufacturers[k].name)
+        select.append(option);
+      }
+
+  eladdProduct.addEventListener("submit", function(evt) {
+    evt.preventDefault();
+
+    const titleValue = elAddTitleInput.value;
+    const priceValue = elAddPriceInput.value;
+    const manufacturerValue = elAddManufacturer.value;
+    const benefitsValue = elAddBenefits.value;
+
+    if(titleValue.trim() && priceValue.trim() && manufacturerValue && benefitsValue.trim()) {
+      const addProducts = {
+        title: titleValue,
+        img: "https://picsum.photos/300/200",
+        price: +priceValue,
+        manufacturer: manufacturerValue,
+        benfits: +benefitsValue,
+        addedDate: new Date().toDateString()
+      }
+
+      products.unshift(addProducts)
+      };
+
+  
+
+  })
 
