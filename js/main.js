@@ -38,9 +38,11 @@ const renderProduct = function(product) {
   const elProductIcons = createElement("div", "position-absolute top-0 end-0 d-flex");
   
   const elPoroductDelete = createElement("button", "btn rounded-0 btn-secondary");
+  elPoroductDelete.dataset.id = product.id
   const elPoroductDeleteIcon = createElement("i", "fa-solid fa-pen");
   elPoroductDelete.append(elPoroductDeleteIcon);
   elProductIcons.append(elPoroductDelete);
+
   
   const elPoroductEdit = createElement("button", "btn rounded-0 btn-danger");
   const elPoroductEditIcon = createElement("i", "fa-solid fa-trash");
@@ -62,20 +64,21 @@ const renderProduct = function(product) {
   return elProducts;
 }
 
-for (let i = 0; i < products.length; i++) {
-  const carrenProduct = products[i]
-  
-  
-  const elProduct = renderProduct(carrenProduct)
-  
-  
-  elProductWrapper.append(elProduct);
-};
+const productRender = function(product) {
+  products.forEach(function(product) {
+    const elProduct = renderProduct(product)
+    elProductWrapper.append(elProduct);
+  })
+}
+
+
 
 const eladdProduct = document.querySelector("#add-product-form");
 const elAddTitleInput = document.querySelector("#product-title");
 const elAddPriceInput = document .querySelector("#price");
 const elAddBenefits = document.querySelector("#benefits");
+
+productRender()
 
 const elAddManufacturer = document.querySelector("#productManufacturer");
 
@@ -107,9 +110,21 @@ eladdProduct.addEventListener("submit", function(evt) {
    elProductWrapper.prepend(elProduct)
     
    eladdProduct.reset()
-  };
-  
-  
-  
+  };  
+})
+
+elProductWrapper.addEventListener("click", function(evt) {
+  if(evt.target.matches(".btn-danger")) {
+    const clickedBtnId = +evt.target.dataset.id;
+    const clickedBtnIndex = products.findIndex(function(product) {
+     return product.id === clickedBtnId
+    })
+
+    products.splice(clickedBtnIndex, 1)
+    elProductWrapper.innerHTML = "";
+    productRender()
+
+
+  }
 })
 
