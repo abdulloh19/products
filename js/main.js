@@ -37,17 +37,20 @@ const renderProduct = function(product) {
   
   const elProductIcons = createElement("div", "position-absolute top-0 end-0 d-flex");
   
-  const elPoroductDelete = createElement("button", "btn rounded-0 btn-secondary");
-  elPoroductDelete.dataset.id = product.id
-  const elPoroductDeleteIcon = createElement("i", "fa-solid fa-pen");
-  elPoroductDelete.append(elPoroductDeleteIcon);
-  elProductIcons.append(elPoroductDelete);
-
-  
-  const elPoroductEdit = createElement("button", "btn rounded-0 btn-danger");
-  const elPoroductEditIcon = createElement("i", "fa-solid fa-trash");
+  const elPoroductEdit = createElement("button", "btn rounded-0 btn-secondary");
+  elPoroductEdit.dataset.bsToggle = "modal";
+  elPoroductEdit.dataset.bsTarget = "#edit-product-modal";
+  elPoroductEdit.dataset.id = product.id;
+  const elPoroductEditIcon = createElement("i", "fa-solid fa-pen");
   elPoroductEdit.append(elPoroductEditIcon);
   elProductIcons.append(elPoroductEdit);
+  
+  
+  const elPoroductDelete = createElement("button", "btn rounded-0 btn-danger");
+  elPoroductDelete.dataset.id = product.id
+  const elPoroductDeleteIcon = createElement("i", "fa-solid fa-trash");
+  elPoroductDelete.append(elPoroductDeleteIcon);
+  elProductIcons.append(elPoroductDelete);
   
   
   elProducts.append(elProductItem);
@@ -70,8 +73,6 @@ const productRender = function(product) {
     elProductWrapper.append(elProduct);
   })
 }
-
-
 
 const eladdProduct = document.querySelector("#add-product-form");
 const elAddTitleInput = document.querySelector("#product-title");
@@ -113,6 +114,14 @@ eladdProduct.addEventListener("submit", function(evt) {
   };  
 })
 
+
+const elProductTitleInput = document.querySelector("#edit-product-title");
+
+const elProductPriceInput = document.querySelector("#edit-price");
+const elProductSelectInput = document.querySelector("#productManufacturers");
+const elProductBenefitsInput = document.querySelector("#edit-benefits");
+const elEditForm = document.querySelector("#edit-product-form")
+
 elProductWrapper.addEventListener("click", function(evt) {
   if(evt.target.matches(".btn-danger")) {
     const clickedBtnId = +evt.target.dataset.id;
@@ -123,8 +132,38 @@ elProductWrapper.addEventListener("click", function(evt) {
     products.splice(clickedBtnIndex, 1)
     elProductWrapper.innerHTML = "";
     productRender()
-
-
   }
+
+  if (evt.target.matches(".btn-secondary")) {
+    const clickedBtnId = +evt.target.dataset.id;
+    const clickedBtnElement = products.find(function(product) {
+      return product.id === clickedBtnId;
+    })
+
+    elProductTitleInput.value = clickedBtnElement.title,
+    elProductPriceInput.value = clickedBtnElement.price,
+    elProductSelectInput.value = clickedBtnElement.model,
+    elProductBenefitsInput.value = clickedBtnElement.benefits
+  }
+})
+
+elEditForm.addEventListener("submit", function(evt) {
+evt.preventDefault();
+
+  const elEditingProduct = {
+    id: evt.target.dataset.id,
+    title: elProductTitleInput.value,
+    price: elProductPriceInput.value,
+    model: elProductSelectInput.value,
+    addedDate: new Date().toISOString(),
+    benefits: elProductBenefitsInput.value
+  }
+
+  const elProductIndex = products.findIndex(function(product) {
+    return elEditingProduct.id === product.id
+  })
+  products.splice(elProductIndex, 1, elEditingProduct)
+  elProductWrapper.innerHTML = "";
+  productRender()
 })
 

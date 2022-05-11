@@ -101,7 +101,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="editStudentModalLabel">Add product</h5>
+          <h5 class="modal-title" id="addStudentModalLabel">Add product</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -134,6 +134,50 @@
               </ul>
             </div>
             <button type="submit" class="btn btn-primary d-block w-100 p-2">Add product</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade" id="edit-product-modal" tabindex="-1" aria-labelledby="editStudentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editStudentModalLabel">Edit product</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="edit-product-form">
+            <div class="mb-3">
+              <label for="product-title" class="form-label">Title</label>
+              <input type="text" class="form-control" id="edit-product-title" placeholder="Falon telefon">
+            </div>
+            <div class="mb-3">
+              <label for="price" class="form-label">Narxi</label>
+              <input type="number" class="form-control" id="edit-price" placeholder="12400000">
+            </div>
+            <div class="mb-3">
+              <label for="product-manufacturer" id="eit-Madnufacturer" class="form-label">Manufacturer</label>
+              <select class="form-select" id="productManufacturers">
+                <option selected disabled value="0">Select a manufacturer</option>
+                <!-- manufacturers array bu yerga kelishi kerak -->
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="benefits" class="form-label">Benefits</label>
+              <input type="text" class="form-control" id="edit-benefits" placeholder="150">
+
+              <ul class="d-flex flex-wrap list-unstyled mt-3">
+                <li class="me-1 mb-1"><button type="button" class="btn btn-sm badge rounded-pill btn-danger">8gb</button></li>
+                <li class="me-1 mb-1"><button type="button" class="btn btn-sm badge rounded-pill btn-danger">128gb</button></li>
+                <li class="me-1 mb-1"><button type="button" class="btn btn-sm badge rounded-pill btn-danger">Waterproof</button></li>
+                <li class="me-1 mb-1"><button type="button" class="btn btn-sm badge rounded-pill btn-danger">Falon yaxshi tarafi</button></li>
+              </ul>
+            </div>
+            <button type="submit" class="btn btn-primary d-block w-100 p-2">Edit product</button>
           </form>
         </div>
       </div>
