@@ -12,7 +12,15 @@ const createElement = function(tagName, className, text) {
   return createdElement;
 }
 
-const renderProduct = function(product) {
+const showDate = function(date) {
+  let day = date.getDate();
+
+  let month = date.getMonth() + 1;
+
+  return `${day < 10 ? "0" + day : day}.${month < 10 ? "0" + month : month}.${date.getFullYear()}`
+}
+
+const createProduct = function(product) {
   
   const elProducts = createElement("li", "col-4");
   const elProductItem = createElement("div", "card");
@@ -25,7 +33,7 @@ const renderProduct = function(product) {
   elProductMark.textContent = product.price;
   const elProductModel = createElement("p", "badge bg-success", product.model);
   const addedDate = new Date(product.addedDate)
-  const elProductData = createElement("p", "card-text", `${addedDate.getDate()}.${(addedDate.getMonth() + 1)}.${addedDate.getFullYear()}`);
+  const elProductData = createElement("p", "card-text", showDate(addedDate));
   const elProductList = createElement("ul", "d-flex flex-wrap list-unstyled");
   
   for (let j = 0; j < product.benefits.length; j++) {
@@ -67,9 +75,9 @@ const renderProduct = function(product) {
   return elProducts;
 }
 
-const productRender = function(product) {
-  products.forEach(function(product) {
-    const elProduct = renderProduct(product)
+const productRender = function(productArray = products) {
+  productArray.forEach(function(product) {
+    const elProduct = createProduct(product)
     elProductWrapper.append(elProduct);
   })
 }
@@ -78,13 +86,18 @@ const eladdProduct = document.querySelector("#add-product-form");
 const elAddTitleInput = document.querySelector("#product-title");
 const elAddPriceInput = document .querySelector("#price");
 const elAddBenefits = document.querySelector("#benefits");
+const elAddModal = new bootstrap.Modal(document.querySelector("#add-product-modal"))
+
 
 productRender()
 
 const elAddManufacturer = document.querySelector("#productManufacturer");
+const elProductSelectInput = document.querySelector("#productManufacturers");
 
 for (let k = 0; k < manufacturers.length; k++) {
   const option = createElement("option", "", manufacturers[k].name)
+  const editOption = createElement("option", "", manufacturers[k].name)
+  elProductSelectInput.append(editOption);
   elAddManufacturer.append(option);
 }
 
@@ -98,32 +111,33 @@ eladdProduct.addEventListener("submit", function(evt) {
   
   if(titleValue.trim() && priceValue.trim() && manufacturerValue && benefitsValue.trim()) {
     const addProduct = {
+      id: Math.floor(Math.random() * 1000),
       title: titleValue,
       img: "https://picsum.photos/300/200",
       price: +priceValue,
       model: manufacturerValue,
-      benefits: benefitsValue.split(" "),
+      benefits: benefitsValue.split(","),
       addedDate: new Date().toDateString()
     }
     
     products.unshift(addProduct)
-   const elProduct =  renderProduct(addProduct);
+   const elProduct =  createProduct(addProduct);
    elProductWrapper.prepend(elProduct)
-    
+
+   elAddModal.hide()
    eladdProduct.reset()
   };  
 })
 
 
 const elProductTitleInput = document.querySelector("#edit-product-title");
-
 const elProductPriceInput = document.querySelector("#edit-price");
-const elProductSelectInput = document.querySelector("#productManufacturers");
 const elProductBenefitsInput = document.querySelector("#edit-benefits");
-const elEditForm = document.querySelector("#edit-product-form")
+const elEditForm = document.querySelector("#edit-product-form");
+const elEditModal = new bootstrap.Modal(document.querySelector("#edit-product-modal"))
 
 elProductWrapper.addEventListener("click", function(evt) {
-  if(evt.target.matches(".btn-danger")) {
+  if(+evt.target.matches(".btn-danger")) {
     const clickedBtnId = +evt.target.dataset.id;
     const clickedBtnIndex = products.findIndex(function(product) {
      return product.id === clickedBtnId
@@ -134,36 +148,72 @@ elProductWrapper.addEventListener("click", function(evt) {
     productRender()
   }
 
-  if (evt.target.matches(".btn-secondary")) {
+  if (+evt.target.matches(".btn-secondary")) ;
+  {
     const clickedBtnId = +evt.target.dataset.id;
     const clickedBtnElement = products.find(function(product) {
       return product.id === clickedBtnId;
     })
 
-    elProductTitleInput.value = clickedBtnElement.title,
-    elProductPriceInput.value = clickedBtnElement.price,
-    elProductSelectInput.value = clickedBtnElement.model,
-    elProductBenefitsInput.value = clickedBtnElement.benefits
+    elProductTitleInput.value = clickedBtnElement.title;
+    elProductPriceInput.value = clickedBtnElement.price;
+    elProductSelectInput.value = clickedBtnElement.model;
+    elProductBenefitsInput.value = clickedBtnElement.benefits;
+
+    elEditForm.dataset.id = clickedBtnId  
   }
 })
 
 elEditForm.addEventListener("submit", function(evt) {
 evt.preventDefault();
 
+const elEditTitleVal = elProductTitleInput.value;
+const elPriceVal = elProductPriceInput.value;
+const elSelectVal = elProductSelectInput.value;
+const elBenefitsVal = elProductBenefitsInput.value;
+
+if (elEditTitleVal && elPriceVal && elSelectVal && elBenefitsVal) {
+
   const elEditingProduct = {
-    id: evt.target.dataset.id,
+    id: +evt.target.dataset.id,
+    img: "https://picsum.photos/300/200",
     title: elProductTitleInput.value,
     price: elProductPriceInput.value,
     model: elProductSelectInput.value,
     addedDate: new Date().toISOString(),
-    benefits: elProductBenefitsInput.value
+    benefits: elProductBenefitsInput.value.split(",")
   }
-
+  
   const elProductIndex = products.findIndex(function(product) {
     return elEditingProduct.id === product.id
   })
   products.splice(elProductIndex, 1, elEditingProduct)
   elProductWrapper.innerHTML = "";
   productRender()
+  elEditModal.hide()
+}
 })
 
+const elFormInput = document.querySelector("#form")
+const elSearchInput = document.querySelector("#search");
+const elFromInput = document.querySelector("#from");
+const elToInput = document.querySelector("#to");
+
+elFormInput.addEventListener("submit", function(evt) {
+  evt.preventDefault();
+
+  const searchInputValue = elSearchInput.value;
+  const elFromValue = elFromInput.value;
+  const elToValue = elToInput.value;
+
+  let filteredProduct = products.filter(function(product) {
+    return product.title.toLowerCase().includes(searchInputValue.toLowerCase())
+  }).filter(function(product) {
+   return product.price >= elFromValue;
+  }).filter(function(product) {
+    return product.price <= elToValue
+  });
+
+  elProductWrapper.innerHTML = "";
+  productRender(filteredProduct);
+  })

@@ -10,12 +10,30 @@ const products = [
     },
   {
     id: 124,
-    title: "Samgung Note 20 Ultra",
+    title: "Samsung Note 20 Ultra",
     img: "https://picsum.photos/300/200",
     price: 8300000,
     model: "Samsung",
     addedDate: new Date("2021-10-12").toISOString(),
     benefits: ["32gb", "1tb"]
+  },
+  {
+    id: 125,
+    title: "Samsung S 20 Ultra",
+    img: "https://picsum.photos/300/200",
+    price: 12000000,
+    model: "Samsung",
+    addedDate: new Date("2021-11-12").toISOString(),
+    benefits: ["32gb", "512gb", "1tb"]
+  },
+  {
+    id: 126,
+    title: "Iphone 13 pro max",
+    img: "https://picsum.photos/300/200",
+    price: 15000000,
+    model: "Apple",
+    addedDate: new Date("2021-08-12").toISOString(),
+    benefits: ["128gb", "512gb", "1tb"]
   }
 ]
 
