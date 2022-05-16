@@ -34,7 +34,25 @@ const products = [
     model: "Apple",
     addedDate: new Date("2021-08-12").toISOString(),
     benefits: ["128gb", "512gb", "1tb"]
-  }
+  },
+  {
+    id: 126,
+    title: "Iphone 12 pro max",
+    img: "https://picsum.photos/300/200",
+    price: 11500000,
+    model: "Apple",
+    addedDate: new Date("2021-08-12").toISOString(),
+    benefits: ["128gb", "512gb", "1tb"]
+  },
+  {
+    id: 126,
+    title: "Redmi 11 pro",
+    img: "https://picsum.photos/300/200",
+    price: 6500000,
+    model: "Xiaomi",
+    addedDate: new Date("2021-08-12").toISOString(),
+    benefits: ["128gb", "512gb"]
+  },
 ]
 
 const manufacturers = [

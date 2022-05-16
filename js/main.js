@@ -21,24 +21,25 @@ const showDate = function(date) {
 }
 
 const createProduct = function(product) {
+  const { id, title, img, price, model, addedDate, benefits } = product; //<--destrubrikatsiya
   
   const elProducts = createElement("li", "col-4");
   const elProductItem = createElement("div", "card");
   const elProductImg = createElement("img", "card-img-top");
-  elProductImg.src = product.img;
+  elProductImg.src = img;
   const elPoroductBody = createElement("div", "card-body");
-  const elProductTitle = createElement("h3", "card-title", product.title);
+  const elProductTitle = createElement("h3", "card-title", title);
   const elProductPrice = createElement("p", "card-text fw-bold");
   const elProductMark = createElement("mark");
-  elProductMark.textContent = product.price;
-  const elProductModel = createElement("p", "badge bg-success", product.model);
-  const addedDate = new Date(product.addedDate)
-  const elProductData = createElement("p", "card-text", showDate(addedDate));
+  elProductMark.textContent = price;
+  const elProductModel = createElement("p", "badge bg-success", model);
+  const elAddedDate = new Date(addedDate)
+  const elProductData = createElement("p", "card-text", showDate(elAddedDate));
   const elProductList = createElement("ul", "d-flex flex-wrap list-unstyled");
   
   for (let j = 0; j < product.benefits.length; j++) {
     
-    const elProductBenefits = createElement("li", "badge bg-primary me-1 mb-1", product.benefits[j])
+    const elProductBenefits = createElement("li", "badge bg-primary me-1 mb-1", benefits[j])
     
     elProductList.append(elProductBenefits);
   };
@@ -48,14 +49,14 @@ const createProduct = function(product) {
   const elPoroductEdit = createElement("button", "btn rounded-0 btn-secondary");
   elPoroductEdit.dataset.bsToggle = "modal";
   elPoroductEdit.dataset.bsTarget = "#edit-product-modal";
-  elPoroductEdit.dataset.id = product.id;
+  elPoroductEdit.dataset.id = id;
   const elPoroductEditIcon = createElement("i", "fa-solid fa-pen");
   elPoroductEdit.append(elPoroductEditIcon);
   elProductIcons.append(elPoroductEdit);
   
   
   const elPoroductDelete = createElement("button", "btn rounded-0 btn-danger");
-  elPoroductDelete.dataset.id = product.id
+  elPoroductDelete.dataset.id = id
   const elPoroductDeleteIcon = createElement("i", "fa-solid fa-trash");
   elPoroductDelete.append(elPoroductDeleteIcon);
   elProductIcons.append(elPoroductDelete);
@@ -93,12 +94,16 @@ productRender()
 
 const elAddManufacturer = document.querySelector("#productManufacturer");
 const elProductSelectInput = document.querySelector("#productManufacturers");
+const elFilterManufarcturer = document.querySelector("#manufacturer");
+
 
 for (let k = 0; k < manufacturers.length; k++) {
   const option = createElement("option", "", manufacturers[k].name)
   const editOption = createElement("option", "", manufacturers[k].name)
-  elProductSelectInput.append(editOption);
+  const filterManufacturer = createElement("option", "", manufacturers[k].name)
   elAddManufacturer.append(option);
+  elProductSelectInput.append(editOption);
+  elFilterManufarcturer.append(filterManufacturer)
 }
 
 eladdProduct.addEventListener("submit", function(evt) {
@@ -198,6 +203,7 @@ const elFormInput = document.querySelector("#form")
 const elSearchInput = document.querySelector("#search");
 const elFromInput = document.querySelector("#from");
 const elToInput = document.querySelector("#to");
+const elSortInput = document.querySelector("#sortby");
 
 elFormInput.addEventListener("submit", function(evt) {
   evt.preventDefault();
@@ -205,14 +211,37 @@ elFormInput.addEventListener("submit", function(evt) {
   const searchInputValue = elSearchInput.value;
   const elFromValue = elFromInput.value;
   const elToValue = elToInput.value;
+  const selectValue = elFilterManufarcturer.value;
+  const sortValue = elSortInput.value;
 
   let filteredProduct = products.filter(function(product) {
     return product.title.toLowerCase().includes(searchInputValue.toLowerCase())
   }).filter(function(product) {
    return product.price >= elFromValue;
   }).filter(function(product) {
-    return product.price <= elToValue
-  });
+    if(elToValue) {
+      return product.price <= elToValue;
+    }
+    return true 
+  }).filter(function(product) {
+    return product.model == selectValue;
+  }).sort(function(a, b) {
+    switch (sortValue) {
+      case "1":
+        if (a.name > b.name) {
+          return 1
+        } else if (a.name < b.name) {
+          return -1
+        } 
+        return 0;
+       case "2":
+        return a.price - b.price;
+        case "3":
+          return b.price - a.price
+      default:
+        return 0
+    }
+  })
 
   elProductWrapper.innerHTML = "";
   productRender(filteredProduct);
