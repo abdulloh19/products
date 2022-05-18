@@ -20,62 +20,38 @@ const showDate = function(date) {
   return `${day < 10 ? "0" + day : day}.${month < 10 ? "0" + month : month}.${date.getFullYear()}`
 }
 
+const elProductTemplate = document.querySelector(".product-template");
+
 const createProduct = function(product) {
   const { id, title, img, price, model, addedDate, benefits } = product; //<--destrubrikatsiya
   
-  const elProducts = createElement("li", "col-4");
-  const elProductItem = createElement("div", "card");
-  const elProductImg = createElement("img", "card-img-top");
+  const elProductRow = elProductTemplate.cloneNode(true).content;
+  console.log(elProductRow);
+  const elProductImg = elProductRow.querySelector(".card-img-top");
   elProductImg.src = img;
-  const elPoroductBody = createElement("div", "card-body");
-  const elProductTitle = createElement("h3", "card-title", title);
-  const elProductPrice = createElement("p", "card-text fw-bold");
-  const elProductMark = createElement("mark");
+  const elProductTitle = elProductRow.querySelector(".card-title");
+  elProductTitle.textContent = title;
+  const elProductMark = elProductRow.querySelector(".card-text");
   elProductMark.textContent = price;
-  const elProductModel = createElement("p", "badge bg-success", model);
-  const elAddedDate = new Date(addedDate)
-  const elProductData = createElement("p", "card-text", showDate(elAddedDate));
-  const elProductList = createElement("ul", "d-flex flex-wrap list-unstyled");
-  
+  const elProductModel = elProductRow.querySelector(".bg-success");
+  elProductModel.textContent = model;
+  const elProductDate = elProductRow.querySelector(".card-text");
+  const AddedDate = new Date(addedDate);
+  elProductDate.textContent = showDate(AddedDate);
+
+  const elProductList = elProductRow.querySelector("ul", "d-flex flex-wrap list-unstyled");
   for (let j = 0; j < product.benefits.length; j++) {
-    
-    const elProductBenefits = createElement("li", "badge bg-primary me-1 mb-1", benefits[j])
-    
+    const elProductBenefits = elProductRow.createElement("li", "badge bg-primary me-1 mb-1", benefits[j])
     elProductList.append(elProductBenefits);
   };
   
-  const elProductIcons = createElement("div", "position-absolute top-0 end-0 d-flex");
+  const elProductEditBtn = elProductRow.querySelector(".btn-secondary");
+  elProductEditBtn.dataset.id = id;
+
+  const elProductDelete = elProductRow.querySelector(".btn-danger");
+  elProductDelete.dataset.id = id;
   
-  const elPoroductEdit = createElement("button", "btn rounded-0 btn-secondary");
-  elPoroductEdit.dataset.bsToggle = "modal";
-  elPoroductEdit.dataset.bsTarget = "#edit-product-modal";
-  elPoroductEdit.dataset.id = id;
-  const elPoroductEditIcon = createElement("i", "fa-solid fa-pen");
-  elPoroductEditIcon.style.pointerEvents = "none"
-  elPoroductEdit.append(elPoroductEditIcon);
-  elProductIcons.append(elPoroductEdit);
-  
-  
-  const elPoroductDelete = createElement("button", "btn rounded-0 btn-danger");
-  elPoroductDelete.dataset.id = id
-  const elPoroductDeleteIcon = createElement("i", "fa-solid fa-trash");
-  elPoroductDeleteIcon.style.pointerEvents = "none"
-  elPoroductDelete.append(elPoroductDeleteIcon);
-  elProductIcons.append(elPoroductDelete);
-  
-  
-  elProducts.append(elProductItem);
-  elProductItem.append(elProductImg);
-  elProductItem.append(elPoroductBody);
-  elPoroductBody.append(elProductTitle)
-  elPoroductBody.append(elProductPrice);
-  elProductPrice.append(elProductMark);
-  elPoroductBody.append(elProductModel);
-  elPoroductBody.append(elProductData)
-  elPoroductBody.append(elProductIcons);
-  elPoroductBody.append(elProductList);
-  
-  return elProducts;
+  return elProductRow;
 }
 
 const elProductCount = document.querySelector(".student-count");
