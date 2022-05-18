@@ -41,7 +41,7 @@ const createProduct = function(product) {
 
   const elProductList = elProductRow.querySelector("ul", "d-flex flex-wrap list-unstyled");
   for (let j = 0; j < product.benefits.length; j++) {
-    const elProductBenefits = elProductRow.createElement("li", "badge bg-primary me-1 mb-1", benefits[j])
+    const elProductBenefits = document.createElement("li", "badge bg-primary me-1 mb-1", benefits[j])
     elProductList.append(elProductBenefits);
   };
   
