@@ -51,6 +51,7 @@ const createProduct = function(product) {
   elPoroductEdit.dataset.bsTarget = "#edit-product-modal";
   elPoroductEdit.dataset.id = id;
   const elPoroductEditIcon = createElement("i", "fa-solid fa-pen");
+  elPoroductEditIcon.style.pointerEvents = "none"
   elPoroductEdit.append(elPoroductEditIcon);
   elProductIcons.append(elPoroductEdit);
   
@@ -58,6 +59,7 @@ const createProduct = function(product) {
   const elPoroductDelete = createElement("button", "btn rounded-0 btn-danger");
   elPoroductDelete.dataset.id = id
   const elPoroductDeleteIcon = createElement("i", "fa-solid fa-trash");
+  elPoroductDeleteIcon.style.pointerEvents = "none"
   elPoroductDelete.append(elPoroductDeleteIcon);
   elProductIcons.append(elPoroductDelete);
   
@@ -76,7 +78,19 @@ const createProduct = function(product) {
   return elProducts;
 }
 
+const elProductCount = document.querySelector(".student-count");
+const elProductAverageMark = document.querySelector(".average-mark")
+
 const productRender = function(productArray = products) {
+  elProductCount.textContent = `Count: ${productArray.length}`;
+
+  const productAverge = productArray.reduce(function(acumalator, product) {
+    return acumalator + product.price;
+  }, 0)
+
+  const productAverageMarks = productAverge / productArray.length;
+  elProductAverageMark.textContent = `Average Price: ${productAverageMarks}`
+
   productArray.forEach(function(product) {
     const elProduct = createProduct(product)
     elProductWrapper.append(elProduct);
@@ -153,7 +167,7 @@ elProductWrapper.addEventListener("click", function(evt) {
     productRender()
   }
 
-  if (+evt.target.matches(".btn-secondary")) ;
+  if (evt.target.matches(".btn-secondary")) 
   {
     const clickedBtnId = +evt.target.dataset.id;
     const clickedBtnElement = products.find(function(product) {
@@ -224,13 +238,16 @@ elFormInput.addEventListener("submit", function(evt) {
     }
     return true 
   }).filter(function(product) {
+    if (selectValue == "0") {
+      return true
+    }
     return product.model == selectValue;
   }).sort(function(a, b) {
     switch (sortValue) {
       case "1":
-        if (a.name > b.name) {
+        if (a.title > b.title) {
           return 1
-        } else if (a.name < b.name) {
+        } else if (a.title < b.title) {
           return -1
         } 
         return 0;
